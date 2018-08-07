@@ -1,8 +1,22 @@
+import random
+
+
 class Board:
-    def __init__(self, board_string: str) -> None:
-        letters = board_string.split(', ')
-        if len(letters) != 16:
-            raise ValueError('Board requires 16 letters')
+    # Original UK version (c1976, yellow box)!
+    # https://gist.github.com/samdobson/6b9a71b39637538338c7e88ced6eb056
+    DICE = [
+        'AACIOT', 'ABILTY', 'ABJMOQ', 'ACDEMP', 'ACELRS', 'ADENVZ', 'AHMORS',
+        'BIFORX', 'DENOSW', 'DKNOTU', 'EEFHIY', 'EGKLUY', 'EGINTV', 'EHINPS',
+        'ELPSTU', 'GILRUW',
+    ]
+
+    def __init__(self, board_string: str = None) -> None:
+        if board_string:
+            letters = board_string.split(', ')
+            if len(letters) != 16:
+                raise ValueError('Board requires 16 letters')
+        else:
+            letters = [random.choice(die) for die in self.DICE]
         self.board = [
             letters[0:4],
             letters[4:8],
