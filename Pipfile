@@ -13,6 +13,7 @@ sqlalchemy = "*"
 pytest = "*"
 freezegun = "*"
 "flake8" = "*"
+mypy = "*"
 
 [requires]
 python_version = "3.6"

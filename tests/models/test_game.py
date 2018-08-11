@@ -6,7 +6,7 @@ from boggle import settings
 from boggle.models.game import COMPLETED, CREATED, IN_PROGRESS, Game
 
 
-def test_game_status():
+def test_game_status() -> None:
     initial_datetime = datetime(
         year=1991, month=10, day=17, hour=3,
         minute=0, second=0,

@@ -22,7 +22,7 @@ class Game(Base):
     )
     started_at = Column(Date)
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.started_at = None
 
     def start(self) -> None:

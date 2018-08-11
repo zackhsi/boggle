@@ -1,4 +1,5 @@
 import random
+from typing import Optional
 
 
 class Board:
@@ -10,7 +11,7 @@ class Board:
         'ELPSTU', 'GILRUW',
     ]
 
-    def __init__(self, board_string: str = None) -> None:
+    def __init__(self, board_string: Optional[str] = None) -> None:
         if board_string:
             letters = board_string.split(', ')
             if len(letters) != 16:

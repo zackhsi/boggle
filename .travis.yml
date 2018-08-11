@@ -4,5 +4,6 @@ python:
 install:
   - pip install pipenv --upgrade && pipenv install --dev
 script:
-  - flake8
-  - pytest -vvs tests
+  - pipenv run flake8
+  - pipenv run mypy .
+  - pipenv run pytest -vvs tests
