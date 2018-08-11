@@ -1,13 +1,27 @@
+import uuid
 from datetime import datetime, timedelta
 
+from sqlalchemy import Column, Date
+from sqlalchemy.dialects.postgresql import UUID
+
 from boggle import settings
+from boggle.database import Base
 
 CREATED = 'created'
 IN_PROGRESS = 'in_progress'
 COMPLETED = 'completed'
 
 
-class Game:
+class Game(Base):
+    __tablename__ = 'games'
+
+    id = Column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
+    )
+    started_at = Column(Date)
+
     def __init__(self):
         self.started_at = None
 

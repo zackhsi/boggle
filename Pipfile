@@ -6,6 +6,8 @@ name = "pypi"
 [packages]
 gunicorn = "*"
 aiohttp = "*"
+sqlalchemy = "*"
+"psycopg2-binary" = "*"
 
 [dev-packages]
 pytest = "*"
