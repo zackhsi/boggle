@@ -1,3 +1,4 @@
+import logging
 import uuid
 from datetime import datetime, timedelta
 
@@ -6,6 +7,8 @@ from sqlalchemy.dialects.postgresql import UUID
 
 from boggle import settings
 from boggle.database import Base
+
+logger = logging.getLogger(__name__)
 
 CREATED = 'created'
 IN_PROGRESS = 'in_progress'
@@ -25,10 +28,6 @@ class Game(Base):
 
     def __init__(self) -> None:
         self.created_at = datetime.utcnow()
-        self.started_at = None
-
-    def start(self) -> None:
-        self.started_at = datetime.utcnow()
 
     @property
     def status(self) -> str:
@@ -40,3 +39,13 @@ class Game(Base):
         if datetime.utcnow() < end_time:
             return IN_PROGRESS
         return COMPLETED
+
+    @property
+    def started(self) -> bool:
+        return bool(self.started_at)
+
+    @started.setter
+    def started(self, new_started: bool) -> None:
+        if new_started and not self.started_at:
+            logger.info(f'Started game {self}')
+            self.started_at = datetime.utcnow()

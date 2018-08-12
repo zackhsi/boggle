@@ -14,7 +14,7 @@ def test_game_status() -> None:
     with freeze_time(initial_datetime) as frozen_datetime:
         game = Game()
         assert game.status == CREATED
-        game.start()
+        game.started = True
         assert game.status == IN_PROGRESS
         frozen_datetime.tick(delta=timedelta(
             milliseconds=settings.DEFAULT_GAME_DURATION_MS - 1)

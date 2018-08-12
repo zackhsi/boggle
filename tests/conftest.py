@@ -23,7 +23,9 @@ def tables() -> Generator:
 
 @pytest.fixture
 async def application() -> web.Application:
-    return create_application()
+    application = create_application()
+    yield application
+    await application.shutdown()
 
 
 @pytest.fixture
@@ -32,4 +34,4 @@ async def client(
     aiohttp_client: Callable,
     tables: None,
 ) -> TestClient:
-    return await aiohttp_client(application)
+    yield await aiohttp_client(application)

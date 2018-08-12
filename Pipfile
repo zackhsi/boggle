@@ -8,6 +8,7 @@ gunicorn = "*"
 aiohttp = "*"
 sqlalchemy = "*"
 "psycopg2-binary" = "*"
+marshmallow-sqlalchemy = "*"
 
 [dev-packages]
 pytest = "*"
