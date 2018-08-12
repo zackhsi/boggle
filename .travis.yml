@@ -6,4 +6,10 @@ install:
 script:
   - pipenv run flake8
   - pipenv run mypy .
-  - pipenv run pytest -vvs tests
+  - ./test
+services:
+  - postgresql
+before_script:
+  - ./tools/create-tables
+env:
+  - ENVIRONMENT=testing

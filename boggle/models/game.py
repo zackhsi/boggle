@@ -20,9 +20,11 @@ class Game(Base):
         primary_key=True,
         default=uuid.uuid4,
     )
+    created_at = Column(Date)
     started_at = Column(Date)
 
     def __init__(self) -> None:
+        self.created_at = datetime.utcnow()
         self.started_at = None
 
     def start(self) -> None:

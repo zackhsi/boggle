@@ -1,13 +1,13 @@
 import subprocess
-from importlib import import_module
-from pkgutil import walk_packages
+
+from sqlalchemy.exc import ProgrammingError
 
 from boggle import models
-from boggle.database import Base
+from boggle.database import Base, cluster_engine
+from boggle.settings import DB_NAME
 
 
 def main() -> None:
-    print('Creating postgres user...')
     try:
         subprocess.check_output(
             [
@@ -20,11 +20,21 @@ def main() -> None:
     except subprocess.CalledProcessError as e:
         if 'already exists' not in e.stdout.decode():
             raise
+    else:
+        print(f'Created postgres user')
 
-    print('Creating tables...')
-    modules = walk_packages(models.__path__, prefix=f'{models.__name__}.')
-    for _, module_name, _ in modules:
-        import_module(module_name)
+    connection = cluster_engine.connect()
+    connection.execute('commit')
+    try:
+        connection.execute(f'create database {DB_NAME}')
+    except ProgrammingError as e:
+        if 'already exists' not in str(e):
+            raise
+    else:
+        print(f'Created database {DB_NAME}')
+    connection.close()
+
+    models.load()
     Base.metadata.create_all()
 
     print('Tables:')

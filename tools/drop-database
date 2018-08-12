@@ -1,0 +1,3 @@
+#!/bin/bash
+set -e
+exec pipenv run python -m tools.drop_database

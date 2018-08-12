@@ -1,4 +1,4 @@
-from boggle.server import create_app
+from boggle.server import create_application
 
 
-boggle = create_app()
+boggle = create_application()
