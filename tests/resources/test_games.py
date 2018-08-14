@@ -13,17 +13,47 @@ async def game_data(client: _TestClient) -> Dict:
 
 
 @pytest.fixture
-async def game_id(game_data: Dict) -> str:
+async def game_id_created(game_data: Dict) -> str:
     game_id: str = game_data['id']
     return game_id
 
 
-async def test_get(client: _TestClient) -> None:
+@pytest.fixture
+async def game_id_started(
+    client: _TestClient,
+    game_id_created: str,
+) -> str:
+    response = await client.put(
+        f'/games/{game_id_created}',
+        json={
+            'started': True,
+        }
+    )
+    game = await response.json()
+    assert game['started_at']
+    return game_id_created
+
+
+async def test_get_empty(client: _TestClient) -> None:
     response = await client.get('/games')
     assert response.status == 200
     data = await response.json()
     games = data['games']
     assert games == []
+
+
+async def test_get_started_game(
+    client: _TestClient,
+    game_id_started: str,
+) -> None:
+    response = await client.get(
+        f'/games',
+        params={'id': game_id_started}
+    )
+    data = await response.json()
+    game = data['games'][0]
+    assert game['started_at']
+    assert game['board']['letters']
 
 
 async def test_post(client: _TestClient) -> None:
@@ -36,17 +66,3 @@ async def test_post(client: _TestClient) -> None:
     games = data['games']
     game_ids = [g['id'] for g in games]
     assert game_id in game_ids
-
-
-async def test_put(
-    client: _TestClient,
-    game_id: str,
-) -> None:
-    response = await client.put(
-        f'/games/{game_id}',
-        json={
-            'started': True,
-        }
-    )
-    game = await response.json()
-    assert game['started_at']

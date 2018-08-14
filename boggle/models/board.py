@@ -1,15 +1,31 @@
 import random
+import uuid
 from typing import Optional
 
+from sqlalchemy import Column, ForeignKey, String
+from sqlalchemy.dialects.postgresql import UUID
 
-class Board:
-    # Original UK version (c1976, yellow box)!
-    # https://gist.github.com/samdobson/6b9a71b39637538338c7e88ced6eb056
-    DICE = [
-        'AACIOT', 'ABILTY', 'ABJMOQ', 'ACDEMP', 'ACELRS', 'ADENVZ', 'AHMORS',
-        'BIFORX', 'DENOSW', 'DKNOTU', 'EEFHIY', 'EGKLUY', 'EGINTV', 'EHINPS',
-        'ELPSTU', 'GILRUW',
-    ]
+from boggle.database import Base
+
+# Original UK version (c1976, yellow box)!
+# https://gist.github.com/samdobson/6b9a71b39637538338c7e88ced6eb056
+DICE = [
+    'AACIOT', 'ABILTY', 'ABJMOQ', 'ACDEMP', 'ACELRS', 'ADENVZ', 'AHMORS',
+    'BIFORX', 'DENOSW', 'DKNOTU', 'EEFHIY', 'EGKLUY', 'EGINTV', 'EHINPS',
+    'ELPSTU', 'GILRUW',
+]
+
+
+class Board(Base):
+    __tablename__ = 'boards'
+
+    id = Column(
+        UUID(),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()),
+    )
+    game_id = Column(UUID(), ForeignKey('games.id'))
+    letters = Column(String)
 
     def __init__(self, board_string: Optional[str] = None) -> None:
         if board_string:
@@ -17,16 +33,13 @@ class Board:
             if len(letters) != 16:
                 raise ValueError('Board requires 16 letters')
         else:
-            letters = [random.choice(die) for die in self.DICE]
-        self.board = [
-            letters[0:4],
-            letters[4:8],
-            letters[8:12],
-            letters[12:16],
-        ]
+            letters = [random.choice(die) for die in DICE]
+        self.letters = ''.join(letters)
 
     def __str__(self) -> str:
-        row_strings = []
-        for row in self.board:
-            row_strings.append(' '.join(row))
-        return '\n'.join(row_strings)
+        return (
+            f'self.letters[0:4]\n'
+            f'self.letters[4:8]\n'
+            f'self.letters[8:12]\n'
+            f'self.letters[12:16]\n'
+        )

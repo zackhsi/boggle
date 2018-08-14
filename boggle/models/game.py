@@ -4,9 +4,11 @@ from datetime import datetime, timedelta
 
 from sqlalchemy import Column, Date
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
 
 from boggle import settings
 from boggle.database import Base
+from boggle.models.board import Board
 
 logger = logging.getLogger(__name__)
 
@@ -19,10 +21,11 @@ class Game(Base):
     __tablename__ = 'games'
 
     id = Column(
-        UUID(as_uuid=True),
+        UUID(),
         primary_key=True,
-        default=uuid.uuid4,
+        default=lambda: str(uuid.uuid4()),
     )
+    board = relationship(Board, uselist=False)
     created_at = Column(Date)
     started_at = Column(Date)
 
@@ -47,5 +50,6 @@ class Game(Base):
     @started.setter
     def started(self, new_started: bool) -> None:
         if new_started and not self.started_at:
-            logger.info(f'Started game {self}')
+            self.board = Board()
             self.started_at = datetime.utcnow()
+            logger.info(f'Started game {self}')
