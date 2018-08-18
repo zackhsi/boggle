@@ -1,0 +1,94 @@
+openapi: 3.0.0
+info:
+  title: Boggle API
+  description: Play Boggle!
+  version: '0.1.0'
+servers:
+  - url: http://127.0.0.1:8000
+    description: development server
+components:
+  schemas:
+    Game:
+      type: object
+      properties:
+        started:
+          type: boolean
+    GameWord:
+      type: object
+      properties:
+        word:
+          type: string
+paths:
+  /games:
+    get:
+      summary: Query for games.
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: ID of game to get.
+      responses:
+        '200':
+          description: Return a list of games.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+    post:
+      summary: Create a game.
+      responses:
+        '200':
+          description: Return the newly created game.
+          content:
+            application/json:
+              schema:
+                type: object
+  /games/{game_id}:
+    put:
+      summary: Update a game.
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: string
+          required: true
+          description: ID of game to update.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+      responses:
+        '200':
+          description: Return the updated game.
+          content:
+            application/json:
+              schema:
+                type: object
+  /games/{game_id}/words:
+    post:
+      summary: Claim a word.
+      parameters:
+        - in: path
+          name: game_id
+          schema:
+            type: string
+          required: true
+          description: ID of game being played.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameWord'
+      responses:
+        '204':
+          description: Word found.
+        '404':
+          description: Word not found.
+        '400':
+          description: Error in word.

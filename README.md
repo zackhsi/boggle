@@ -14,3 +14,46 @@ game it does not have to be the same character for each word.
 
 For example, if the tiles C, T, and * are adjacent. The words cot, cat, and cut
 can all be used.
+
+API
+---
+
+The API is documented in [API.yaml](/API.yaml) using [OpenAPI Version
+3.0.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md).
+It can be viewed on
+[swaggerhub](https://app.swaggerhub.com/apis/zackhsi/boggle).
+
+Basic usage:
+
+```sh
+# Start Boggle server.
+$ ./run
+
+# List games.
+$ curl -XGET localhost:8000/games
+
+# Create game.
+$ curl -sXPOST localhost:8000/games | jq '.'
+{
+  "id": "8285fbc8-350d-4bb1-916e-af51128761eb",
+  "started_at": null,
+  "board": null,
+  "created_at": "2018-08-18T04:07:36.935115"
+}
+
+# Start game.
+$ curl -sXPUT localhost:8000/games/8285fbc8-350d-4bb1-916e-af51128761eb -d '{"started":true}' | jq '.'
+{
+  "id": "8285fbc8-350d-4bb1-916e-af51128761eb",
+  "started_at": "2018-08-18T04:10:26.777045",
+  "board": {
+    "id": null,
+    "letters": "TBOECNHXEUIGTHPU"
+  },
+  "created_at": "2018-08-18"
+}
+
+# Claim a word.
+$ curl -w "%{http_code}" -XPOST localhost:8000/games/8285fbc8-350d-4bb1-916e-af51128761eb/words -d '{"word": "PINT"}'
+204
+```
