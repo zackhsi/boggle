@@ -1,5 +1,6 @@
 import random
 import uuid
+from functools import lru_cache
 from typing import Dict, List, Optional, Set
 
 from sqlalchemy import Column, ForeignKey, String
@@ -39,6 +40,31 @@ for n in range(16):
         CONNECTIONS[n].add(m)
 
 
+@lru_cache(maxsize=None)
+class BoardNode:
+    def __init__(
+        self,
+        *,
+        index: int,
+        letters: List[str],
+    ) -> None:
+        self.index = index
+        self.letters = letters
+
+    def children(self) -> List:
+        return [
+            BoardNode(
+                index=index,
+                letters=self.letters,
+            )
+            for index in CONNECTIONS[self.index]
+        ]
+
+    @property
+    def letter(self) -> str:
+        return self.letters[self.index]
+
+
 class Board(Base):
     __tablename__ = 'boards'
 
@@ -67,43 +93,42 @@ class Board(Base):
             f'{self.letters[12:16]}\n'
         )
 
+    def compare_letters(self, a: str, b: str) -> bool:
+        if a == WILDCARD or b == WILDCARD:
+            return True
+        return a == b
+
     def __contains__(self, needle_word: str) -> bool:
+        """
+        Detect if a word is in the board, subject to wildcard logic.
+
+        At a high level, this method performs a DFS of the board. The DFS stack
+        is initially seeded with nodes representing matches of the first letter
+        of the needle word.
+        """
         if not needle_word:
             return True
 
-        # needle_word_indexes is a list of lists. Each inner list corresponds
-        # to a needle_letter in the needle_world, in order. Each inner list
-        # contains the indexes in self.letters where that needle_letter can be
-        # found.
-        needle_word_indexes: List[List[int]] = []
-        for needle_letter in needle_word:
-            needle_letter_indexes = []
-            for haystack_letter_index, haystack_letter in enumerate(self.letters):  # noqa E501
-                match = (
-                    needle_letter == haystack_letter or
-                    haystack_letter == WILDCARD
+        stack = []
+        for haystack_letter_index, haystack_letter in enumerate(self.letters):
+            if self.compare_letters(haystack_letter, needle_word[0]):
+                node = BoardNode(
+                    index=haystack_letter_index,
+                    letters=self.letters,
                 )
-                if match:
-                    needle_letter_indexes.append(haystack_letter_index)
-            if not needle_letter_indexes:
-                return False
-            needle_word_indexes.append(needle_letter_indexes)
+                # node, depth, path.
+                stack.append((node, 0, [node]))
 
-        return self.find_path(needle_word_indexes)
-
-    def find_path(self, needle_word_indexes: List[List[int]]) -> bool:
-        stack = [
-            (initial_index, 0, [initial_index])
-            for initial_index in needle_word_indexes[0]
-        ]
         while stack:
-            index, depth, path = stack.pop(-1)
-            if depth == len(needle_word_indexes) - 1:
+            node, depth, path = stack.pop(-1)
+            if depth == len(needle_word) - 1:
                 return True
-            for next_index in CONNECTIONS[index]:
-                if next_index in path:
-                    # Do not revisit letters.
+            for child in node.children():
+                # Do not revisit.
+                if child in path:
                     continue
-                if next_index in needle_word_indexes[depth + 1]:
-                    stack.append((next_index, depth + 1, path + [next_index]))
+                print(child.letter)
+                if self.compare_letters(child.letter, needle_word[depth + 1]):
+                    stack.append((child, depth + 1, path + [child]))
+
         return False
