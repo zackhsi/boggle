@@ -127,7 +127,6 @@ class Board(Base):
                 # Do not revisit.
                 if child in path:
                     continue
-                print(child.letter)
                 if self.compare_letters(child.letter, needle_word[depth + 1]):
                     stack.append((child, depth + 1, path + [child]))
 
