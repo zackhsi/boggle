@@ -16,6 +16,7 @@ freezegun = "*"
 "flake8" = "*"
 mypy = "*"
 pytest-aiohttp = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.6"

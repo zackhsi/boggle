@@ -6,6 +6,9 @@ DEFAULT_GAME_DURATION_MS = 180000
 # Wildcard.
 WILDCARD = '*'
 
+# Board size.
+BOARD_SIZE = 16
+
 # Environment.
 DEVELOPMENT = 'development'
 TESTING = 'testing'

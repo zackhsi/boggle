@@ -1,4 +1,4 @@
-from typing import Callable, Generator
+from typing import Callable, Dict, Generator
 
 import pytest
 from aiohttp import web
@@ -35,3 +35,33 @@ async def client(
     tables: None,
 ) -> TestClient:
     yield await aiohttp_client(application)
+
+
+@pytest.fixture
+async def game_data(client: TestClient) -> Dict:
+    response = await client.post('/games')
+    assert response.status == 200
+    data: Dict = await response.json()
+    return data
+
+
+@pytest.fixture
+async def game_id_created(game_data: Dict) -> str:
+    game_id: str = game_data['id']
+    return game_id
+
+
+@pytest.fixture
+async def game_id_started(
+    client: TestClient,
+    game_id_created: str,
+) -> str:
+    response = await client.put(
+        f'/games/{game_id_created}',
+        json={
+            'started': True,
+        }
+    )
+    game = await response.json()
+    assert game['started_at']
+    return game_id_created
