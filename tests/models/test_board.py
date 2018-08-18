@@ -1,5 +1,5 @@
-from typing import Optional
 import textwrap
+from typing import Optional
 
 import pytest
 

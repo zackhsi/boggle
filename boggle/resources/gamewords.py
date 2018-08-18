@@ -1,10 +1,15 @@
 import logging
 
-from aiohttp.web import Request, Response
+from aiohttp.web import Request, Response, json_response
 from sqlalchemy.orm.session import Session
 
+from boggle import dictionary
 from boggle.models.game import Game
-from boggle.settings import BOARD_SIZE
+from boggle.settings import (
+    BOARD_SIZE,
+    REASON_NOT_IN_BOARD_FMT,
+    REASON_NOT_IN_DICTIONARY_FMT,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +23,20 @@ async def post(request: Request) -> Response:
     word = data.get('word')
     if not word or len(word) > BOARD_SIZE:
         return Response(status=400)
-    if word in board:
-        return Response(status=204)
-    else:
-        return Response(status=404)
+
+    # Check dictionary before board so we have saner error messages.
+    if not dictionary.lookup(word):
+        return json_response(
+            {
+                'reason': REASON_NOT_IN_DICTIONARY_FMT.format(word=word),
+            },
+            status=404,
+        )
+    if word not in board:
+        return json_response(
+            {
+                'reason': REASON_NOT_IN_BOARD_FMT.format(word=word),
+            },
+            status=404,
+        )
+    return Response(status=204)

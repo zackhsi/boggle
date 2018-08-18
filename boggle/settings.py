@@ -9,6 +9,10 @@ WILDCARD = '*'
 # Board size.
 BOARD_SIZE = 16
 
+# Word not found reason.
+REASON_NOT_IN_DICTIONARY_FMT = '{word} is not in the dictionary!'
+REASON_NOT_IN_BOARD_FMT = '{word} is not in the board!'
+
 # Environment.
 DEVELOPMENT = 'development'
 TESTING = 'testing'
@@ -17,6 +21,14 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', DEVELOPMENT)
 VALID_ENVIRONMENTS = [DEVELOPMENT, TESTING, PRODUCTION]
 if ENVIRONMENT not in VALID_ENVIRONMENTS:
     raise Exception(f'Environment "{ENVIRONMENT}" not in {VALID_ENVIRONMENTS}')
+
+# Dictionary.
+if ENVIRONMENT == TESTING:
+    # Speed up test runs.
+    DICTIONARY_PATH = 'data/dictionary_test.txt'
+else:
+    DICTIONARY_PATH = 'data/dictionary.txt'
+DICTIONARY_VARIANT = 'marisa_trie'
 
 # Database.
 DB_DIALECT = 'postgresql'

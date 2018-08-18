@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "64c476c534f4366f8e199064c9fb3984c950e47dcd377742e2514510e0391090"
+            "sha256": "9dc67c06ec83dc5d24fd25b80f3c264ff3fe509f7cb7d9a022aef40ab488eb7b"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -80,6 +80,14 @@
             ],
             "version": "==1.1.0"
         },
+        "marisa-trie": {
+            "hashes": [
+                "sha256:4419abb6b603c97e863fad994abe57ed247fb12491f4bbacb2d762bd2e8958b6",
+                "sha256:c73bc25d868e8c4ea7aa7f1e19892db07bba2463351269b05340ccfa06eb2baf"
+            ],
+            "index": "pypi",
+            "version": "==0.7.5"
+        },
         "marshmallow": {
             "hashes": [
                 "sha256:0f3776aa5b5405f6000c9304841abe6d4d708bb08207fc89a5ecd86622ec9e54",
@@ -149,6 +157,13 @@
             ],
             "index": "pypi",
             "version": "==2.7.5"
+        },
+        "pygtrie": {
+            "hashes": [
+                "sha256:28261896d9fea0439d5ee521403812b444c041036d2335b86dbf9c9c2ec1a703"
+            ],
+            "index": "pypi",
+            "version": "==2.3"
         },
         "sqlalchemy": {
             "hashes": [
@@ -324,13 +339,20 @@
             ],
             "version": "==1.6.0"
         },
-        "pytest": {
+        "pympler": {
             "hashes": [
-                "sha256:86a8dbf407e437351cef4dba46736e9c5a6e3c3ac71b2e942209748e76ff2086",
-                "sha256:e74466e97ac14582a8188ff4c53e6cc3810315f342f6096899332ae864c1d432"
+                "sha256:7d16c4285f01dcc647f69fb6ed4635788abc7a7cb7caa0065d763f4ce3d21c0f"
             ],
             "index": "pypi",
-            "version": "==3.7.1"
+            "version": "==0.5"
+        },
+        "pytest": {
+            "hashes": [
+                "sha256:3459a123ad5532852d36f6f4501dfe1acf4af1dd9541834a164666aa40395b02",
+                "sha256:96bfd45dbe863b447a3054145cd78a9d7f31475d2bce6111b133c0cc4f305118"
+            ],
+            "index": "pypi",
+            "version": "==3.7.2"
         },
         "pytest-aiohttp": {
             "hashes": [

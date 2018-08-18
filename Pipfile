@@ -9,6 +9,8 @@ aiohttp = "*"
 sqlalchemy = "*"
 "psycopg2-binary" = "*"
 marshmallow-sqlalchemy = "*"
+pygtrie = "*"
+marisa-trie = "*"
 
 [dev-packages]
 pytest = "*"
@@ -17,6 +19,7 @@ freezegun = "*"
 mypy = "*"
 pytest-aiohttp = "*"
 pytest-mock = "*"
+pympler = "*"
 
 [requires]
 python_version = "3.6"
