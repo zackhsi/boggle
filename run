@@ -1,3 +1,19 @@
 #!/bin/bash
 set -e
-exec pipenv run gunicorn app:boggle -k aiohttp.worker.GunicornWebWorker
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [[ $TRAVIS == "true" ]]; then
+  BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+else
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+fi
+docker run \
+  --name boggle \
+  --interactive \
+  --tty \
+  --rm \
+  --env ENVIRONMENT="$ENVIRONMENT" \
+  --link postgres:postgres \
+  --mount type=bind,source="$DIR",target=/code/boggle \
+  --publish 8000:8000 \
+  "zackhsi/boggle:$BRANCH" \
+  "$@"

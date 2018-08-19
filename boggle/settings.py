@@ -35,7 +35,7 @@ DB_DIALECT = 'postgresql'
 DB_DRIVER = 'psycopg2'
 DB_USER = 'postgres'
 DB_PASSWORD = ''
-DB_HOST = 'localhost'
+DB_HOST = os.getenv('POSTGRES_PORT_5432_TCP_ADDR', 'localhost')
 DB_PORT = '5432'
 POSTGRES_URI = (
     f'{DB_DIALECT}+{DB_DRIVER}://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}'

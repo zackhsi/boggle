@@ -1,15 +1,18 @@
+sudo: required
 language: python
+services:
+  - docker
 python:
   - '3.6'
-install:
-  - pip install pipenv --upgrade && pipenv install --dev
-script:
-  - pipenv run flake8
-  - pipenv run mypy .
-  - ./test
-services:
-  - postgresql
+before_install:
+  - docker pull zackhsi/boggle:latest
+  - ./build --cache-from zackhsi/boggle:latest
 before_script:
-  - ./tools/create-tables
+  - docker run --detach --name postgres postgres
+  - ./run ./tools/create-tables
+script:
+  - ./run pipenv run flake8
+  - ./run pipenv run mypy .
+  - ./run ./test
 env:
   - ENVIRONMENT=testing

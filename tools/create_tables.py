@@ -1,4 +1,4 @@
-import subprocess
+import time
 
 from sqlalchemy.exc import ProgrammingError
 
@@ -8,22 +8,12 @@ from boggle.settings import DB_NAME
 
 
 def main() -> None:
-    try:
-        subprocess.check_output(
-            [
-                'createuser',
-                '--superuser',
-                'postgres',
-            ],
-            stderr=subprocess.STDOUT
-        )
-    except subprocess.CalledProcessError as e:
-        if 'already exists' not in e.stdout.decode():
-            raise
-    else:
-        print(f'Created postgres user')
-
-    connection = cluster_engine.connect()
+    for attempt in range(5):
+        try:
+            connection = cluster_engine.connect()
+        except Exception:
+            print('Failed to connect to database, sleeping 1s...')
+            time.sleep(1)
     connection.execute('commit')
     try:
         connection.execute(f'create database {DB_NAME}')

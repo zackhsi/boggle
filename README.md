@@ -57,3 +57,27 @@ $ curl -sXPUT localhost:8000/games/8285fbc8-350d-4bb1-916e-af51128761eb -d '{"st
 $ curl -w "%{http_code}" -XPOST localhost:8000/games/8285fbc8-350d-4bb1-916e-af51128761eb/words -d '{"word": "PINT"}'
 204
 ```
+
+Development
+-----------
+Use Docker to develop Boggle.
+
+```sh
+# Start postgres.
+$ docker run --detach --name postgres postgres
+
+# Build Docker image.
+$ ./build
+
+# Create testing tables.
+$ ENVIRONMENT=testing ./run ./tools/create-tables
+
+# Run tests.
+$ ./run ./test
+
+# Run server.
+$ ./run
+
+# Run interactive shell.
+$ ./run bash
+```

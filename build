@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+if [ -z "$BRANCH" ] && [ -d .git ]; then
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+fi
+exec docker build \
+  --tag "zackhsi/boggle:$BRANCH" \
+  "$@" \
+  .
