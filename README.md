@@ -64,9 +64,6 @@ Development
 Use Docker to develop Boggle.
 
 ```sh
-# Start postgres.
-$ docker run --detach --name postgres postgres
-
 # Build Docker image.
 $ ./build
 
