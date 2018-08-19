@@ -6,7 +6,15 @@ if [[ $TRAVIS == "true" ]]; then
 else
   BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
-docker run \
+if [[ $BRANCH == "master" ]]; then
+  TAG="latest"
+else
+  TAG=$BRANCH
+fi
+if ! docker inspect postgres &> /dev/null; then
+  docker run --detach --name postgres postgres
+fi
+exec docker run \
   --name boggle \
   --interactive \
   --tty \
@@ -15,5 +23,5 @@ docker run \
   --link postgres:postgres \
   --mount type=bind,source="$DIR",target=/code/boggle \
   --publish 8000:8000 \
-  "zackhsi/boggle:$BRANCH" \
+  "zackhsi/boggle:$TAG" \
   "$@"

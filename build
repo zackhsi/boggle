@@ -1,7 +1,8 @@
 #!/bin/bash
 set -e
-BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
-if [ -z "$BRANCH" ] && [ -d .git ]; then
+if [[ $TRAVIS == "true" ]]; then
+  BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+else
   BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
 exec docker build \
