@@ -2,6 +2,7 @@ Boggle
 ======
 
 [![Build Status](https://travis-ci.org/zackhsi/boggle.svg?branch=master)](https://travis-ci.org/zackhsi/boggle)
+![Docker Pulls](https://img.shields.io/docker/pulls/zackhsi/boggle.svg)
 
 [Boggle](https://en.wikipedia.org/wiki/Boggle) is a word game that is played on
 a 4x4 board with 16 letter tiles.
