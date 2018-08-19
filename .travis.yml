@@ -4,6 +4,11 @@ services:
   - docker
 python:
   - '3.6'
+env:
+  - ENVIRONMENT=testing
+branches:
+  only: 
+    - master
 before_install:
   - docker pull zackhsi/boggle:latest
   - ./build --cache-from zackhsi/boggle:latest
@@ -14,5 +19,9 @@ script:
   - ./run pipenv run flake8
   - ./run pipenv run mypy .
   - ./run ./test
-env:
-  - ENVIRONMENT=testing
+after_success:
+  - if [[ "$TRAVIS_BRANCH" == "master" ]]; then
+      echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+      docker tag zackhsi/boggle:master zackhsi/boggle:latest
+      docker push zackhsi/boggle:latest
+    fi
