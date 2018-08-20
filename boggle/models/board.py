@@ -12,9 +12,9 @@ from boggle.settings import WILDCARD
 # Original UK version (c1976, yellow box)!
 # https://gist.github.com/samdobson/6b9a71b39637538338c7e88ced6eb056
 DICE = [
-    'AACIOT', 'ABILTY', 'ABJMOQ', 'ACDEMP', 'ACELRS', 'ADENVZ', 'AHMORS',
-    'BIFORX', 'DENOSW', 'DKNOTU', 'EEFHIY', 'EGKLUY', 'EGINTV', 'EHINPS',
-    'ELPSTU', 'GILRUW',
+    'aaciot', 'abilty', 'abjmoq', 'acdemp', 'acelrs', 'adenvz', 'ahmors',
+    'biforx', 'denosw', 'dknotu', 'eefhiy', 'egkluy', 'egintv', 'ehinps',
+    'elpstu', 'gilruw',
 ]
 
 #   x

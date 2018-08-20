@@ -24,6 +24,8 @@ async def post(request: Request) -> Response:
     if not word or len(word) > BOARD_SIZE:
         return Response(status=400)
 
+    word = word.lower()
+
     # Check dictionary before board so we have saner error messages.
     if not dictionary.lookup(word):
         return json_response(

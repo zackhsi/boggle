@@ -27,6 +27,9 @@ It can be viewed on
 Basic usage:
 
 ```sh
+# Create database tables.
+$ ./run ./tools/create-tables
+
 # Start Boggle server.
 $ ./run
 
