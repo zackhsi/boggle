@@ -1,18 +1,22 @@
 #!/bin/bash
 set -e
+
+# Ensure postgres container is running unless we are in production.
+if [ "$ENVIRONMENT" != "production" ]; then
+  if ! docker inspect postgres &> /dev/null; then
+    docker run --detach --name postgres postgres
+  fi
+fi
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [[ $TRAVIS == "true" ]]; then
   BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
 else
   BRANCH=$(git rev-parse --abbrev-ref HEAD)
 fi
-if [[ $BRANCH == "master" ]]; then
-  TAG="latest"
-else
-  TAG=$BRANCH
-fi
-if ! docker inspect postgres &> /dev/null; then
-  docker run --detach --name postgres postgres
+IMAGE=zackhsi/boggle:$BRANCH
+if ! docker inspect "$IMAGE" &> /dev/null; then
+  IMAGE=zackhsi/boggle:latest
 fi
 exec docker run \
   --name boggle \
@@ -23,5 +27,5 @@ exec docker run \
   --link postgres:postgres \
   --mount type=bind,source="$DIR",target=/code/boggle \
   --publish 8000:8000 \
-  "zackhsi/boggle:$TAG" \
+  "$IMAGE" \
   "$@"
