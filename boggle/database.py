@@ -15,6 +15,7 @@ cluster_engine = create_engine(POSTGRES_URI)
 database_engine = create_engine(DB_URI)
 Base = declarative_base(bind=database_engine)
 SessionMaker = sessionmaker(bind=database_engine)
+logger.info(f'Database URI: {DB_URI}')
 
 
 async def session_middleware(

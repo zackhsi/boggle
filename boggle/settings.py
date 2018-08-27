@@ -33,8 +33,8 @@ DICTIONARY_VARIANT = 'marisa_trie'
 # Database.
 DB_DIALECT = 'postgresql'
 DB_DRIVER = 'psycopg2'
-DB_USER = 'postgres'
-DB_PASSWORD = ''
+DB_USER = os.getenv('DB_USER', 'postgres')
+DB_PASSWORD = os.getenv('DB_PASSWORD', '')
 DB_HOST = os.getenv('POSTGRES_PORT_5432_TCP_ADDR', 'localhost')
 DB_PORT = '5432'
 POSTGRES_URI = (
